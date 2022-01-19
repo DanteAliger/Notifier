@@ -3,7 +3,6 @@ package com.notifier.web;
 import com.notifier.exception.ErrorResponse;
 import com.notifier.exception.NotFoundException;
 import com.notifier.exception.NotifierException;
-import com.notifier.exception.UserExistsException;
 import com.notifier.model.Person;
 import com.notifier.service.PersonService;
 import com.notifier.web.request.CreatePersonRq;
