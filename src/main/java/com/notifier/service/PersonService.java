@@ -1,15 +1,20 @@
 package com.notifier.service;
 
+import com.notifier.exception.ErrorCode;
 import com.notifier.exception.NotFoundException;
+import com.notifier.exception.NotifierException;
 import com.notifier.exception.UserExistsException;
 import com.notifier.model.Person;
 import com.notifier.repository.PersonRepository;
 import com.notifier.web.request.CreatePersonRq;
 import com.notifier.web.request.UpdatePersonRq;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+
+import static com.notifier.exception.ErrorCode.USER_EXISTS;
 
 @Service
 public class PersonService {
@@ -17,13 +22,13 @@ public class PersonService {
     @Autowired
     private PersonRepository personRepository;
 
-    public Person create(CreatePersonRq request) throws UserExistsException {
+    public Person create(CreatePersonRq request) throws NotifierException {
         if (personRepository.findByName(request.getName()) == null) {
             Person person = new Person();
             person.setName(request.getName());
             return personRepository.save(person);
         } else {
-            throw new UserExistsException();
+            throw new NotifierException(USER_EXISTS, HttpStatus.CONFLICT);
         }
     }
 

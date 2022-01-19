@@ -1,6 +1,8 @@
 package com.notifier.web;
 
+import com.notifier.exception.ErrorResponse;
 import com.notifier.exception.NotFoundException;
+import com.notifier.exception.NotifierException;
 import com.notifier.exception.UserExistsException;
 import com.notifier.model.Person;
 import com.notifier.service.PersonService;
@@ -31,12 +33,8 @@ public class PersonController {
     }
 
     @PostMapping("/create") //localhost:8081/persons/create
-    public ResponseEntity<String> create(@RequestBody CreatePersonRq request) {
-        try {
-            return ResponseEntity.ok("Hi " + personService.create(request).getName());
-        } catch (UserExistsException ex) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Person with name = " + request.getName() + " already exists");
-        }
+    public ResponseEntity<String> create(@RequestBody CreatePersonRq request) throws NotifierException {
+        return ResponseEntity.ok("Hi " + personService.create(request).getName());
     }
 
     @GetMapping("/all")
@@ -60,8 +58,13 @@ public class PersonController {
     }
 
     @DeleteMapping("/deleteAll")
-    public ResponseEntity<Void> deleteAll(){
+    public ResponseEntity<Void> deleteAll() {
         personService.delete();
         return ResponseEntity.ok().build();
+    }
+
+    @ExceptionHandler(value = NotifierException.class) // обработка исключения
+    public ResponseEntity<ErrorResponse> handle(NotifierException e) {
+        return ResponseEntity.status(e.getStatus()).body(new ErrorResponse(e.getCode()));
     }
 }
