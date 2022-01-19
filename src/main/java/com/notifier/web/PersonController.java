@@ -58,4 +58,10 @@ public class PersonController {
     public ResponseEntity<Person> update(@RequestBody UpdatePersonRq request) {
         return ResponseEntity.ok(personService.update(request));
     }
+
+    @DeleteMapping("/deleteAll")
+    public ResponseEntity<Void> deleteAll(){
+        personService.delete();
+        return ResponseEntity.ok().build();
+    }
 }

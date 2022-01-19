@@ -39,7 +39,7 @@ public class PersonService {
         Comparator<Person> comparator = (o1, o2) -> o1.getName().compareTo(o2.getName());
         Comparator<Person> comparator2 = Comparator.comparing(p -> p.getName());
         Comparator<Person> comparator3 = Comparator.comparing(Person::getName);
-        SortedSet<Person> personAll = new TreeSet<>(comparator);
+        SortedSet<Person> personAll = new TreeSet<>(comparator3);
         personAll.addAll(personRepository.findAll());
         return personAll;
     }
@@ -58,5 +58,9 @@ public class PersonService {
         person.setName(request.getName());
         personRepository.save(person);
         return person;
+    }
+
+    public void delete() {
+        personRepository.deleteAll();
     }
 }
