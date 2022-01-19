@@ -9,11 +9,10 @@ import javax.persistence.Id;
 
 @Data
 @Entity // создание сущности
-public class Person {
+public class Person{
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
     private String name;
 }
