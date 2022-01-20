@@ -1,7 +1,6 @@
 package com.notifier.web.request;
 
 import com.notifier.model.Event;
-import com.notifier.model.Person;
 import lombok.Data;
 
 import java.time.Duration;

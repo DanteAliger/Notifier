@@ -1,10 +1,6 @@
 package com.notifier.service;
 
-import com.notifier.exception.ErrorCode;
-import com.notifier.exception.NotFoundException;
 import com.notifier.exception.NotifierException;
-import com.notifier.exception.UserExistsException;
-import com.notifier.model.Event;
 import com.notifier.model.Person;
 import com.notifier.model.Template;
 import com.notifier.repository.PersonRepository;
@@ -17,7 +13,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import java.util.*;
+import java.util.Comparator;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import static com.notifier.exception.ErrorCode.*;
 
@@ -86,9 +85,9 @@ public class PersonService {
         }
     }
 
-    public Person update(Long id,UpdatePersonRq request){
+    public Person update(Long id,UpdatePersonRq request) throws NotifierException{
         Person person = personRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Такого пользователя нет"));
+                .orElseThrow(() -> new NotifierException(USER_NOT_FOUND,HttpStatus.NOT_FOUND));
         person.setName(request.getName());
         person.setSurname(request.getSurname());
         person.setPhone(request.getPhone());

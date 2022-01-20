@@ -31,6 +31,7 @@ public class PersonController {
     public ResponseEntity<String> create(@RequestBody CreatePersonRq request) throws NotifierException {
         return ResponseEntity.ok("Hi " + personService.create(request).getName());
     }
+
     @PostMapping("/{id}/templates/create")
     public ResponseEntity<String> createTemplate(@PathVariable Long id, @RequestBody CreateTemplateRq request) throws NotifierException {
         Template template = personService.createTemplate(id, request);
@@ -49,7 +50,7 @@ public class PersonController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<Person> update(@PathVariable Long id, @RequestBody UpdatePersonRq request) {
+    public ResponseEntity<Person> update(@PathVariable Long id, @RequestBody UpdatePersonRq request) throws NotifierException {
         return ResponseEntity.ok(personService.update(id ,request));
     }
 

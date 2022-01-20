@@ -11,7 +11,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 
 @Data
-@Accessors(chain = true)
+@Accessors(chain = true) // сhain - это цепочка, создает ципочку из setterov and getterov, то есть сделать в одну строку всё
 @Entity
 //@ManyToOne
 public class Event {
