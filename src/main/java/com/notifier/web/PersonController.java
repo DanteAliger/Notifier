@@ -1,14 +1,12 @@
 package com.notifier.web;
 
 import com.notifier.exception.ErrorResponse;
-import com.notifier.exception.NotFoundException;
 import com.notifier.exception.NotifierException;
 import com.notifier.model.Person;
 import com.notifier.service.PersonService;
 import com.notifier.web.request.CreatePersonRq;
 import com.notifier.web.request.UpdatePersonRq;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,12 +21,8 @@ public class PersonController {
     //get post put delete
 
     @GetMapping("/get")
-    public ResponseEntity<?> get(@RequestParam String name) {
-        try {
+    public ResponseEntity<?> get(@RequestParam String name) throws NotifierException{
             return ResponseEntity.ok(personService.get(name));
-        } catch (NotFoundException ex) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Not found this person!");
-        }
     }
 
     @PostMapping("/create") //localhost:8081/persons/create
@@ -42,18 +36,14 @@ public class PersonController {
     }
 
     @DeleteMapping("/deleteId")
-    public ResponseEntity<?> deleteId(@RequestParam Long Id) {
-        try {
+    public ResponseEntity<?> deleteId(@RequestParam Long Id) throws NotifierException{
             personService.delete(Id);
             return ResponseEntity.ok().build();
-        } catch (NotFoundException ex) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Not found this person!");
-        }
     }
 
-    @PutMapping("/update")
-    public ResponseEntity<Person> update(@RequestBody UpdatePersonRq request) {
-        return ResponseEntity.ok(personService.update(request));
+    @PutMapping("/update/{id}")
+    public ResponseEntity<Person> update(@PathVariable Long id, @RequestBody UpdatePersonRq request) {
+        return ResponseEntity.ok(personService.update(id ,request));
     }
 
     @DeleteMapping("/deleteAll")

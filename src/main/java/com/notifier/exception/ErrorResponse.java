@@ -10,8 +10,9 @@ public class ErrorResponse {
     public ErrorResponse(ErrorCode code){
         this.error = new Error(code);
     }
+
     @Data
-    public static class Error {
+    public static class Error{
         private final ErrorCode code;
     }
 }

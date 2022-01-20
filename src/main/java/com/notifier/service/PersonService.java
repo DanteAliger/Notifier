@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 
+import static com.notifier.exception.ErrorCode.NOT_FOUND;
 import static com.notifier.exception.ErrorCode.USER_EXISTS;
 
 @Service
@@ -32,11 +33,11 @@ public class PersonService {
         }
     }
 
-    public void delete(Long id) throws NotFoundException {
+    public void delete(Long id) throws NotifierException {
         if (personRepository.findById(id).isPresent()) {
             personRepository.deleteById(id);
         } else {
-            throw new NotFoundException();
+            throw new NotifierException(NOT_FOUND, HttpStatus.NOT_FOUND);
         }
     }
 
@@ -49,18 +50,21 @@ public class PersonService {
         return personAll;
     }
 
-    public Person get(String name) throws NotFoundException {
+    public Person get(String name) throws NotifierException {
         if (personRepository.findByName(name) != null) {
             return personRepository.findByName(name);
         } else {
-            throw new NotFoundException();
+            throw new NotifierException(NOT_FOUND, HttpStatus.NOT_FOUND);
         }
     }
 
-    public Person update(UpdatePersonRq request){
-        Person person = personRepository.findById(request.getId())
+    public Person update(Long id,UpdatePersonRq request){
+        Person person = personRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Такого пользователя нет"));
         person.setName(request.getName());
+        person.setSurname(request.getSurname());
+        person.setPhone(request.getPhone());
+        person.setEmail(request.getEmail());
         personRepository.save(person);
         return person;
     }
