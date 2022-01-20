@@ -11,6 +11,7 @@ public class Timetable {
     @Id
     @GeneratedValue
     private Long id;
+
     @OneToOne
     @JoinColumn(name = "id_event")
     private Event event;

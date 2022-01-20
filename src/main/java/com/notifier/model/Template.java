@@ -1,5 +1,6 @@
 package com.notifier.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -12,6 +13,13 @@ public class Template{
     @GeneratedValue
     private Long id;
 
+    @OneToOne
+    @JoinColumn(name = "id_person")
+
+    private Person person;
+
     @OneToMany(cascade = CascadeType.ALL) //каскадные действия
+    @JoinColumn(name = "id_timetable")
+    @JsonIgnore
     private List<Timetable> timetableList;
 }

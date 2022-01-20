@@ -1,5 +1,6 @@
 package com.notifier.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -17,6 +18,6 @@ public class Person{
     private String surname;
     private String phone;
     private String email;
-    @OneToOne
+    @OneToOne(mappedBy = "person")
     private Template template;
 }
