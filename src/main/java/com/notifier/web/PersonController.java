@@ -3,8 +3,10 @@ package com.notifier.web;
 import com.notifier.exception.ErrorResponse;
 import com.notifier.exception.NotifierException;
 import com.notifier.model.Person;
+import com.notifier.model.Template;
 import com.notifier.service.PersonService;
 import com.notifier.web.request.CreatePersonRq;
+import com.notifier.web.request.CreateTemplateRq;
 import com.notifier.web.request.UpdatePersonRq;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +30,11 @@ public class PersonController {
     @PostMapping("/create") //localhost:8081/persons/create
     public ResponseEntity<String> create(@RequestBody CreatePersonRq request) throws NotifierException {
         return ResponseEntity.ok("Hi " + personService.create(request).getName());
+    }
+    @PostMapping("/{id}/templates/create")
+    public ResponseEntity<String> createTemplate(@PathVariable Long id, @RequestBody CreateTemplateRq request) throws NotifierException {
+        Template template = personService.createTemplate(id, request);
+        return ResponseEntity.ok("Timetable " + template.getName() + " added");
     }
 
     @GetMapping("/all")

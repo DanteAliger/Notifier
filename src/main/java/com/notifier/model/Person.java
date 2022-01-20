@@ -18,6 +18,6 @@ public class Person{
     private String surname;
     private String phone;
     private String email;
-    @OneToOne(mappedBy = "person")
-    private Template template;
+    @OneToMany(mappedBy = "person")
+    private List<Template> templates;
 }

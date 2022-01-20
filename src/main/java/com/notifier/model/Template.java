@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -12,14 +13,14 @@ public class Template{
     @Id
     @GeneratedValue
     private Long id;
+    private String name;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "id_person")
-
+    @JsonIgnore
     private Person person;
 
     @OneToMany(cascade = CascadeType.ALL) //каскадные действия
-    @JoinColumn(name = "id_timetable")
-    @JsonIgnore
-    private List<Timetable> timetableList;
+    @JoinColumn(name = "id_template")
+    private List<Event> events = new ArrayList<>();
 }

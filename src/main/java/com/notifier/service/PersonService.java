@@ -4,18 +4,22 @@ import com.notifier.exception.ErrorCode;
 import com.notifier.exception.NotFoundException;
 import com.notifier.exception.NotifierException;
 import com.notifier.exception.UserExistsException;
+import com.notifier.model.Event;
 import com.notifier.model.Person;
+import com.notifier.model.Template;
 import com.notifier.repository.PersonRepository;
+import com.notifier.repository.TemplateRepository;
 import com.notifier.web.request.CreatePersonRq;
+import com.notifier.web.request.CreateTemplateRq;
 import com.notifier.web.request.UpdatePersonRq;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.util.*;
 
-import static com.notifier.exception.ErrorCode.NOT_FOUND;
-import static com.notifier.exception.ErrorCode.USER_EXISTS;
+import static com.notifier.exception.ErrorCode.*;
 
 @Service
 public class PersonService {
@@ -23,15 +27,39 @@ public class PersonService {
     @Autowired
     private PersonRepository personRepository;
 
+    @Autowired
+    private TemplateRepository templateRepository;
+
     public Person create(CreatePersonRq request) throws NotifierException {
         if (personRepository.findByName(request.getName()) == null) {
             Person person = new Person();
             person.setName(request.getName());
+            person.setSurname(request.getSurname());
+            person.setPhone(request.getPhone());
+            person.setEmail(request.getEmail());
             return personRepository.save(person);
         } else {
             throw new NotifierException(USER_EXISTS, HttpStatus.CONFLICT);
         }
     }
+
+    public Template createTemplate(Long personId,CreateTemplateRq request) throws NotifierException {
+        Person person = personRepository.findById(personId).orElseThrow(() -> new NotifierException(USER_NOT_FOUND, HttpStatus.NOT_FOUND));
+        Template template = new Template();
+        template.setPerson(person);
+        template.setName(request.getName());
+        if(!CollectionUtils.isEmpty(request.getEvents())){
+            request.getEvents().forEach((event) -> template.getEvents().add(event.toEntity()));
+        }
+        return templateRepository.save(template);
+
+//        for (CreateTemplateRq.EventRq event: request.getEvents()) {
+//            template.getEvents().add(event.toEntity());
+//        }
+// throw new NotifierException(USER_EXISTS, HttpStatus.CONFLICT);
+
+    }
+
 
     public void delete(Long id) throws NotifierException {
         if (personRepository.findById(id).isPresent()) {
