@@ -5,7 +5,13 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 
 public class Test7 {
-    final Person person;
+
+      final Person person;
+
+//    Operation operation;
+//    operation = (x,y)->x+y;
+//    int result = operation.calculate(10, 20);
+//        System.out.println(result); //30
 
     @Override
     public String toString() {

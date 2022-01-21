@@ -4,6 +4,7 @@ import com.notifier.exception.NotifierException;
 import com.notifier.model.Event;
 import com.notifier.model.Person;
 import com.notifier.model.Template;
+import com.notifier.repository.EventRepository;
 import com.notifier.repository.PersonRepository;
 import com.notifier.repository.TemplateRepository;
 import com.notifier.web.request.CreateEventRq;
@@ -31,6 +32,9 @@ public class PersonService {
     @Autowired
     private TemplateRepository templateRepository;
 
+    @Autowired
+    private EventRepository eventRepository;
+
     public Person create(CreatePersonRq request) throws NotifierException {
         if (personRepository.findByName(request.getName()) == null) {
             Person person = new Person();
@@ -50,7 +54,7 @@ public class PersonService {
         template.setPerson(person);
         template.setName(request.getName());
         if(!CollectionUtils.isEmpty(request.getEvents())){
-            request.getEvents().forEach((event) -> template.getEvents().add(event.toEntity()));
+            request.getEvents().forEach((event) -> template.addEvent(event.toEntity()));
         }
         return templateRepository.save(template);
 
@@ -66,6 +70,20 @@ public class PersonService {
         template.addEvent(request.toEntity());
         templateRepository.save(template);
         return request.toEntity();
+    }
+
+    public Event updateEvent(Long id, CreateEventRq request) throws NotifierException {
+        Event event = eventRepository.findById(id).orElseThrow(()-> new NotifierException(NOT_FOUND, HttpStatus.NOT_FOUND));
+        event.setText(request.getText());
+        event.setDuration(request.getDuration());
+        event.setNextExecution(request.getNextExecution());
+        event.setRepeatable(request.getRepeatable());
+        return event;
+    }
+
+    public void deleteEvent(Long id) throws NotifierException {
+        Event event = eventRepository.findById(id).orElseThrow(() -> new NotifierException(NOT_FOUND, HttpStatus.NOT_FOUND));
+        eventRepository.delete(event);
     }
 
     public void delete(Long id) throws NotifierException {

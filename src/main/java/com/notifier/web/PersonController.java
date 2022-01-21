@@ -43,13 +43,24 @@ public class PersonController {
     @PostMapping("/templates/{id}/event/create")
     public ResponseEntity<String> createEvent(@PathVariable Long id, @RequestBody CreateEventRq request) throws NotifierException{
        Event event = personService.createEvent(id, request);
-       return ResponseEntity.ok("Event: " + event.getText()+ " add!");
+       return ResponseEntity.ok("Event add: " + event.getText());
+    }
+
+    @PutMapping("/templates/event/{id}/update")
+    public ResponseEntity<Event> updateEvent (@PathVariable Long id, @RequestBody CreateEventRq request) throws NotifierException {
+        return ResponseEntity.ok(personService.updateEvent(id, request));
+    }
+
+    @DeleteMapping("/template/event/{id}/")
+    public ResponseEntity<String> deleteEvent(@PathVariable Long id){
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/all")
     public ResponseEntity<Set<Person>> all() {
         return ResponseEntity.ok(personService.all());
     }
+
 
     @DeleteMapping("/deleteId")
     public ResponseEntity<?> deleteId(@RequestParam Long Id) throws NotifierException{
