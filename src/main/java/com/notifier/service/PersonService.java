@@ -1,10 +1,12 @@
 package com.notifier.service;
 
 import com.notifier.exception.NotifierException;
+import com.notifier.model.Event;
 import com.notifier.model.Person;
 import com.notifier.model.Template;
 import com.notifier.repository.PersonRepository;
 import com.notifier.repository.TemplateRepository;
+import com.notifier.web.request.CreateEventRq;
 import com.notifier.web.request.CreatePersonRq;
 import com.notifier.web.request.CreateTemplateRq;
 import com.notifier.web.request.UpdatePersonRq;
@@ -59,6 +61,12 @@ public class PersonService {
 
     }
 
+    public Event createEvent(Long templateId, CreateEventRq request) throws NotifierException{
+        Template template = templateRepository.findById(templateId).orElseThrow(() -> new NotifierException(NOT_FOUND, HttpStatus.NOT_FOUND));
+        template.addEvent(request.toEntity());
+        templateRepository.save(template);
+        return request.toEntity();
+    }
 
     public void delete(Long id) throws NotifierException {
         if (personRepository.findById(id).isPresent()) {

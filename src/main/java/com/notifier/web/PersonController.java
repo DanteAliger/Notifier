@@ -2,9 +2,11 @@ package com.notifier.web;
 
 import com.notifier.exception.ErrorResponse;
 import com.notifier.exception.NotifierException;
+import com.notifier.model.Event;
 import com.notifier.model.Person;
 import com.notifier.model.Template;
 import com.notifier.service.PersonService;
+import com.notifier.web.request.CreateEventRq;
 import com.notifier.web.request.CreatePersonRq;
 import com.notifier.web.request.CreateTemplateRq;
 import com.notifier.web.request.UpdatePersonRq;
@@ -36,6 +38,12 @@ public class PersonController {
     public ResponseEntity<String> createTemplate(@PathVariable Long id, @RequestBody CreateTemplateRq request) throws NotifierException {
         Template template = personService.createTemplate(id, request);
         return ResponseEntity.ok("Timetable " + template.getName() + " added");
+    }
+
+    @PostMapping("/templates/{id}/event/create")
+    public ResponseEntity<String> createEvent(@PathVariable Long id, @RequestBody CreateEventRq request) throws NotifierException{
+       Event event = personService.createEvent(id, request);
+       return ResponseEntity.ok("Event: " + event.getText()+ " add!");
     }
 
     @GetMapping("/all")

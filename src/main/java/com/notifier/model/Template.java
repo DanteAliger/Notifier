@@ -23,4 +23,8 @@ public class Template{
     @OneToMany(cascade = CascadeType.ALL) //каскадные действия
     @JoinColumn(name = "id_template")
     private List<Event> events = new ArrayList<>();
+
+    public void addEvent(Event event){
+        events.add(event);
+    }
 }

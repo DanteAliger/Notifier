@@ -20,4 +20,5 @@ public class Person{
     private String email;
     @OneToMany(mappedBy = "person")
     private List<Template> templates;
+
 }

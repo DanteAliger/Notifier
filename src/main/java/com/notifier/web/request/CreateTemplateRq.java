@@ -10,21 +10,7 @@ import java.util.List;
 @Data
 public class CreateTemplateRq {
     private String name;
-    private List<EventRq> events;
+    private List<CreateEventRq> events;
 
-    @Data
-    public static class EventRq{
-        private String text;
-        private Duration duration;
-        private Boolean repeatable;
-        private LocalDateTime nextExecution;
 
-        public Event toEntity(){
-            return new Event()
-                    .setText(text)
-                    .setDuration(duration)
-                    .setRepeatable(repeatable)
-                    .setNextExecution(nextExecution);
-        }
-    }
 }
