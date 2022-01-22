@@ -1,20 +1,13 @@
 package com.notifier.service;
 
 import com.notifier.exception.NotifierException;
-import com.notifier.model.Event;
 import com.notifier.model.Person;
-import com.notifier.model.Template;
-import com.notifier.repository.EventRepository;
 import com.notifier.repository.PersonRepository;
-import com.notifier.repository.TemplateRepository;
-import com.notifier.web.request.CreateEventRq;
 import com.notifier.web.request.CreatePersonRq;
-import com.notifier.web.request.CreateTemplateRq;
 import com.notifier.web.request.UpdatePersonRq;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
 import java.util.Comparator;
 import java.util.Set;
@@ -41,7 +34,6 @@ public class PersonService {
             throw new NotifierException(USER_EXISTS, HttpStatus.CONFLICT);
         }
     }
-
 
     public void delete(Long id) throws NotifierException {
         if (personRepository.findById(id).isPresent()) {
