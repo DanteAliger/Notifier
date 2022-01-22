@@ -2,13 +2,9 @@ package com.notifier.web;
 
 import com.notifier.exception.ErrorResponse;
 import com.notifier.exception.NotifierException;
-import com.notifier.model.Event;
 import com.notifier.model.Person;
-import com.notifier.model.Template;
 import com.notifier.service.PersonService;
-import com.notifier.web.request.CreateEventRq;
 import com.notifier.web.request.CreatePersonRq;
-import com.notifier.web.request.CreateTemplateRq;
 import com.notifier.web.request.UpdatePersonRq;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +16,7 @@ import java.util.Set;
 @RequestMapping("/persons")
 public class PersonController {
 
-    @Autowired
+    @Autowired // внедрит класс2 в класс1
     private PersonService personService;
     //get post put delete
 
@@ -34,22 +30,11 @@ public class PersonController {
         return ResponseEntity.ok("Hi " + personService.create(request).getName());
     }
 
-    @PostMapping("/{id}/templates/create")
-    public ResponseEntity<String> createTemplate(@PathVariable Long id, @RequestBody CreateTemplateRq request) throws NotifierException {
-        Template template = personService.createTemplate(id, request);
-        return ResponseEntity.ok("Timetable " + template.getName() + " added");
-    }
-
-    @PostMapping("/templates/{id}/event/create")
-    public ResponseEntity<String> createEvent(@PathVariable Long id, @RequestBody CreateEventRq request) throws NotifierException{
-       Event event = personService.createEvent(id, request);
-       return ResponseEntity.ok("Event: " + event.getText()+ " add!");
-    }
-
     @GetMapping("/all")
     public ResponseEntity<Set<Person>> all() {
         return ResponseEntity.ok(personService.all());
     }
+
 
     @DeleteMapping("/deleteId")
     public ResponseEntity<?> deleteId(@RequestParam Long Id) throws NotifierException{
