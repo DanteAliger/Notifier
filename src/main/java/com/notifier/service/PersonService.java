@@ -29,12 +29,6 @@ public class PersonService {
     @Autowired
     private PersonRepository personRepository;
 
-    @Autowired
-    private TemplateRepository templateRepository;
-
-    @Autowired
-    private EventRepository eventRepository;
-
     public Person create(CreatePersonRq request) throws NotifierException {
         if (personRepository.findByName(request.getName()) == null) {
             Person person = new Person();
@@ -48,43 +42,6 @@ public class PersonService {
         }
     }
 
-    public Template createTemplate(Long personId,CreateTemplateRq request) throws NotifierException {
-        Person person = personRepository.findById(personId).orElseThrow(() -> new NotifierException(USER_NOT_FOUND, HttpStatus.NOT_FOUND));
-        Template template = new Template();
-        template.setPerson(person);
-        template.setName(request.getName());
-        if(!CollectionUtils.isEmpty(request.getEvents())){
-            request.getEvents().forEach((event) -> template.addEvent(event.toEntity()));
-        }
-        return templateRepository.save(template);
-
-//        for (CreateTemplateRq.EventRq event: request.getEvents()) {
-//            template.getEvents().add(event.toEntity());
-//        }
-// throw new NotifierException(USER_EXISTS, HttpStatus.CONFLICT);
-
-    }
-
-    public Event createEvent(Long templateId, CreateEventRq request) throws NotifierException{
-        Template template = templateRepository.findById(templateId).orElseThrow(() -> new NotifierException(NOT_FOUND, HttpStatus.NOT_FOUND));
-        template.addEvent(request.toEntity());
-        templateRepository.save(template);
-        return request.toEntity();
-    }
-
-    public Event updateEvent(Long id, CreateEventRq request) throws NotifierException {
-        Event event = eventRepository.findById(id).orElseThrow(()-> new NotifierException(NOT_FOUND, HttpStatus.NOT_FOUND));
-        event.setText(request.getText());
-        event.setDuration(request.getDuration());
-        event.setNextExecution(request.getNextExecution());
-        event.setRepeatable(request.getRepeatable());
-        return event;
-    }
-
-    public void deleteEvent(Long id) throws NotifierException {
-        Event event = eventRepository.findById(id).orElseThrow(() -> new NotifierException(NOT_FOUND, HttpStatus.NOT_FOUND));
-        eventRepository.delete(event);
-    }
 
     public void delete(Long id) throws NotifierException {
         if (personRepository.findById(id).isPresent()) {
