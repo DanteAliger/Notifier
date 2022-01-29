@@ -8,7 +8,8 @@ import java.time.LocalDateTime;
 
 
 @Data
-public class CreateEventRq {
+public class SaveEventRq {
+
         private String text;
         private Duration duration;
         private Boolean repeatable;

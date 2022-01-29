@@ -5,8 +5,8 @@ import com.notifier.exception.NotifierException;
 import com.notifier.model.Event;
 import com.notifier.model.Template;
 import com.notifier.service.PersonTemplateService;
-import com.notifier.web.request.CreateEventRq;
-import com.notifier.web.request.CreateTemplateRq;
+import com.notifier.web.request.SaveEventRq;
+import com.notifier.web.request.SaveTemplateRq;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +18,7 @@ public class TemplateController {
     private PersonTemplateService personTemplateService;
 
     @PostMapping("/{id}/create")
-    public ResponseEntity<String> createTemplate(@PathVariable Long id, @RequestBody CreateTemplateRq request) throws NotifierException {
+    public ResponseEntity<String> createTemplate(@PathVariable Long id, @RequestBody SaveTemplateRq request) throws NotifierException {
         Template template = personTemplateService.createTemplate(id, request);
         return ResponseEntity.ok("Timetable " + template.getName() + " added");
     }
@@ -29,13 +29,13 @@ public class TemplateController {
     }
 
     @PostMapping("/{id}/event/create")
-    public ResponseEntity<String> createEvent(@PathVariable Long id, @RequestBody CreateEventRq request) throws NotifierException{
+    public ResponseEntity<String> createEvent(@PathVariable Long id, @RequestBody SaveEventRq request) throws NotifierException{
         Event event = personTemplateService.createEvent(id, request);
         return ResponseEntity.ok("Event add: " + event.getText());
     }
 
     @PutMapping("/{tId}/event/{eId}/update")
-    public ResponseEntity<Event> updateEvent (@PathVariable Long tId,@PathVariable Long eId, @RequestBody CreateEventRq request) throws NotifierException {
+    public ResponseEntity<Event> updateEvent (@PathVariable Long tId,@PathVariable Long eId, @RequestBody SaveEventRq request) throws NotifierException {
         return ResponseEntity.ok(personTemplateService.updateEvent(tId, eId, request));
     }
 

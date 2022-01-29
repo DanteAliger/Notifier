@@ -3,8 +3,7 @@ package com.notifier.service;
 import com.notifier.exception.NotifierException;
 import com.notifier.model.Person;
 import com.notifier.repository.PersonRepository;
-import com.notifier.web.request.CreatePersonRq;
-import com.notifier.web.request.UpdatePersonRq;
+import com.notifier.web.request.SavePersonRq;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -22,7 +21,7 @@ public class PersonService {
     @Autowired
     private PersonRepository personRepository;
 
-    public Person create(CreatePersonRq request) throws NotifierException {
+    public Person create(SavePersonRq request) throws NotifierException {
         if (personRepository.findByName(request.getName()) == null) {
             Person person = new Person();
             person.setName(request.getName());
@@ -60,7 +59,7 @@ public class PersonService {
         }
     }
 
-    public Person update(Long id,UpdatePersonRq request) throws NotifierException{
+    public Person update(Long id,SavePersonRq request) throws NotifierException{
         Person person = personRepository.findById(id)
                 .orElseThrow(() -> new NotifierException(USER_NOT_FOUND,HttpStatus.NOT_FOUND));
         person.setName(request.getName());

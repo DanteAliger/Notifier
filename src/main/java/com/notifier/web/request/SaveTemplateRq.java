@@ -5,9 +5,9 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class CreateTemplateRq {
+public class SaveTemplateRq {
     private String name;
-    private List<CreateEventRq> events;
+    private List<SaveEventRq> events;
 
 
 }

@@ -2,18 +2,27 @@ package com.notifier.web;
 
 import com.notifier.exception.ErrorResponse;
 import com.notifier.exception.NotifierException;
+import com.notifier.exception.ValidationErrorResponse;
 import com.notifier.model.Person;
 import com.notifier.service.PersonService;
-import com.notifier.web.request.CreatePersonRq;
-import com.notifier.web.request.UpdatePersonRq;
+import com.notifier.web.request.SavePersonRq;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
+@Validated
 @RestController
 @RequestMapping("/persons")
+//@ControllerAdvice
 public class PersonController {
 
     @Autowired // внедрит класс2 в класс1
@@ -26,7 +35,7 @@ public class PersonController {
     }
 
     @PostMapping("/create") //localhost:8081/persons/create
-    public ResponseEntity<String> create(@RequestBody CreatePersonRq request) throws NotifierException {
+    public ResponseEntity<String> create(@RequestBody @Valid SavePersonRq request) throws NotifierException {
         return ResponseEntity.ok("Hi " + personService.create(request).getName());
     }
 
@@ -43,7 +52,7 @@ public class PersonController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<Person> update(@PathVariable Long id, @RequestBody UpdatePersonRq request) throws NotifierException {
+    public ResponseEntity<Person> update(@PathVariable Long id, @RequestBody @Valid SavePersonRq request) throws NotifierException {
         return ResponseEntity.ok(personService.update(id ,request));
     }
 
@@ -56,5 +65,14 @@ public class PersonController {
     @ExceptionHandler(value = NotifierException.class) // обработка исключения
     public ResponseEntity<ErrorResponse> handle(NotifierException e) {
         return ResponseEntity.status(e.getStatus()).body(new ErrorResponse(e.getCode()));
+    }
+
+    @ExceptionHandler(value = MethodArgumentNotValidException.class) // обработка исключения
+    public ResponseEntity<ValidationErrorResponse> handle(MethodArgumentNotValidException e) {
+        List<ValidationErrorResponse.Error> errors = e.getBindingResult().getFieldErrors().stream()
+                .map(s -> new ValidationErrorResponse.Error(s.getField(), s.getDefaultMessage()))
+                .collect(Collectors.toList());
+        ValidationErrorResponse body = new ValidationErrorResponse(errors);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
     }
 }
