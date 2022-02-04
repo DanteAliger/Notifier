@@ -39,11 +39,12 @@ public class PersonTemplateService {
         Template template = new Template();
         template.setPerson(person);
         template.setName(request.getName());
-        if(!CollectionUtils.isEmpty(request.getEvents())){
-            request.getEvents().forEach((event) -> template.addEvent(event.toEntity()));
-        }
         return templateRepository.save(template);
 
+//        if(!CollectionUtils.isEmpty(request.getEvents())){
+//            request.getEvents().forEach((event) -> template.addEvent(event.toEntity()));
+//        }
+        
 //        for (CreateTemplateRq.EventRq event: request.getEvents()) {
 //            template.getEvents().add(event.toEntity());
 //        }

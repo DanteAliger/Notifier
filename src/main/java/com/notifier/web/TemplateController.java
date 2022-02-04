@@ -8,8 +8,6 @@ import com.notifier.model.Template;
 import com.notifier.service.PersonTemplateService;
 import com.notifier.web.request.SaveEventRq;
 import com.notifier.web.request.SaveTemplateRq;
-import com.notifier.web.request.validation.One;
-import com.notifier.web.request.validation.Two;
 import com.notifier.web.request.validation.ValidationGroup;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +17,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.GroupSequence;
-import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,7 +28,7 @@ public class TemplateController {
     private PersonTemplateService personTemplateService;
 
     @PostMapping("/{id}/create")
-    public ResponseEntity<String> createTemplate(@PathVariable Long id, @RequestBody @Valid SaveTemplateRq request) throws NotifierException {
+    public ResponseEntity<String> createTemplate(@PathVariable Long id, @RequestBody @Validated(ValidationGroup.class) SaveTemplateRq request) throws NotifierException {
         Template template = personTemplateService.createTemplate(id, request);
         return ResponseEntity.ok("Timetable " + template.getName() + " added");
     }
