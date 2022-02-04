@@ -1,6 +1,6 @@
 package com.notifier.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.notifier.web.utils.Status;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -20,5 +20,8 @@ public class Person{
     private String email;
     @OneToMany(mappedBy = "person")
     private List<Template> templates;
+
+    @Enumerated(value = EnumType.STRING)
+    private Status status = Status.ACTIVE;
 
 }

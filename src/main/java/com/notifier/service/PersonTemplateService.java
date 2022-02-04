@@ -59,9 +59,9 @@ public class PersonTemplateService {
     public Event updateEvent(Long templateId, Long eventId, SaveEventRq request) throws NotifierException {
         Event event = eventRepository.findTemplateEvent(templateId, eventId).orElseThrow(()-> new NotifierException(NOT_FOUND, HttpStatus.NOT_FOUND));
         event.setText(request.getText());
-        event.setDuration(request.getDuration());
         event.setNextExecution(request.getNextExecution());
         event.setRepeatable(request.getRepeatable());
+        eventRepository.save(event);
         return event;
     }
 
@@ -81,7 +81,10 @@ public class PersonTemplateService {
         return eventRepository.findNotificationEvents();
     }
 
-    public void saveAllEvents(List<Event> events){
-        eventRepository.saveAll(events);
+    public synchronized void saveAllEvents(List<Event> events){
+        synchronized (this){
+            eventRepository.saveAll(events);
+        }
+
     }
 }

@@ -11,6 +11,19 @@ public interface EventRepository extends JpaRepository<Event, Long> {
     @Query("select e from Template t join t.events e where e.id = :eventId and t.id = :templateId")
     Optional<Event> findTemplateEvent(Long templateId, Long eventId);
 
-    @Query("select e from Event e where e.nextExecution < CURRENT_TIMESTAMP and e.status='ACTIVE'" )
+    @Query(value = "select e.* from event e " +
+            "join template on e.id_template = template.id " +
+            "join person on template.id_person = person.id " +
+            "where person.status='ACTIVE' " +
+            "and template.status='ACTIVE' " +
+            "and e.status='ACTIVE' " +
+            "and (e.next_execution - e.period_time_notification) < CURRENT_TIMESTAMP" , nativeQuery = true )
     List<Event> findNotificationEvents();
 }
+//"select e from event e " +
+//        "join template on e.id_template = template.id " +
+//        "join person on template.id_person = person.id " +
+//        "where person.status='ACTIVE' " +
+//        "and template.status='ACTIVE' " +
+//        "and e.status='ACTIVE' " +
+//        "and (e.next_execution - e.period_time_notification) < CURRENT_TIMESTAMP" , nativeQuery = true )

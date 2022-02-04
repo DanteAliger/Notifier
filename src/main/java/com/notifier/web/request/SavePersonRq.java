@@ -1,6 +1,6 @@
 package com.notifier.web.request;
 
-import com.notifier.web.Constants;
+import com.notifier.web.utils.Constants;
 import lombok.Data;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;

@@ -1,6 +1,7 @@
 package com.notifier.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.notifier.web.utils.Status;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -23,6 +24,9 @@ public class Template{
     @OneToMany(cascade = CascadeType.ALL) //каскадные действия
     @JoinColumn(name = "id_template")
     private List<Event> events = new ArrayList<>();
+
+    @Enumerated(value = EnumType.STRING) // записывает в БД типом varchar(string)
+    private Status status = Status.ACTIVE;
 
     public void addEvent(Event event){
         events.add(event);

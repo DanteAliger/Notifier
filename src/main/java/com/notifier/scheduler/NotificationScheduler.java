@@ -2,6 +2,7 @@ package com.notifier.scheduler;
 
 import com.notifier.model.Event;
 import com.notifier.service.PersonTemplateService;
+import com.notifier.web.utils.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -35,7 +36,11 @@ public class NotificationScheduler {
 
     private void notify(Event event){
         System.out.println("Notification: " + event.getText());
-        event.setNextExecution(LocalDateTime.now().plus(event.getDuration()));
+        if (event.getRepeatable()==true)
+            event.setNextExecution(LocalDateTime.now().plus(event.getDuration())) ;
+        else
+            event.setStatus(Status.COMPLETED);
+
     }
 
 }
