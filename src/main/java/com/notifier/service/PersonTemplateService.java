@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.validation.annotation.Validated;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +34,7 @@ public class PersonTemplateService {
     private PersonRepository personRepository;
 
     public Template createTemplate(Long personId, SaveTemplateRq request) throws NotifierException {
+
         Person person = personRepository.findById(personId).orElseThrow(() -> new NotifierException(USER_NOT_FOUND, HttpStatus.NOT_FOUND));
         Template template = new Template();
         template.setPerson(person);
