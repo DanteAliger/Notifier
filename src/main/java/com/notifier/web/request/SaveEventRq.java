@@ -19,11 +19,11 @@ import java.time.LocalDateTime;
 
 @Data
 public class SaveEventRq {
-        @Size(min = 1, max = 255, message = Constants.INVALID)
-        @NotNull(message = Constants.NOT_NULL)
+        @NotNull(message = Constants.NOT_NULL, groups = One.class)
+        @Size(min = 1, max = 255, message = Constants.INVALID, groups = Two.class)
         private String text;
 
-        @NotNull(message = Constants.NOT_NULL)
+        @NotNull(message = Constants.NOT_NULL )
         @JsonDeserialize(using  = DurationMinutesDeserializer.class)
         private Duration periodTimeNotification;
 

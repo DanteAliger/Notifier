@@ -1,5 +1,7 @@
 package com.notifier.web.request;
 
+import com.notifier.web.request.validation.One;
+import com.notifier.web.request.validation.Two;
 import com.notifier.web.utils.Constants;
 import lombok.Data;
 
@@ -10,8 +12,8 @@ import java.util.List;
 @Data
 public class SaveTemplateRq {
 
-    @Size(min = 2, max = 20, message = Constants.INVALID)
-    @NotNull(message = Constants.NOT_NULL)
+    @Size(min = 2, max = 20, message = Constants.INVALID, groups = Two.class)
+    @NotNull(message = Constants.NOT_NULL , groups = One.class)
     private String name;
     private List<SaveEventRq> events;
 
