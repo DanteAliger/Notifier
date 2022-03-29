@@ -3,10 +3,11 @@ package com.notifier.web;
 import com.notifier.exception.ErrorResponse;
 import com.notifier.exception.NotifierException;
 import com.notifier.exception.ValidationErrorResponse;
-import com.notifier.model.Person;
-import com.notifier.service.PersonService;
-import com.notifier.web.request.SavePersonRq;
+import com.notifier.model.Event;
+import com.notifier.service.EventService;
+import com.notifier.web.request.SaveEventRq;
 import com.notifier.web.request.validation.ValidationGroup;
+import com.notifier.web.response.EventResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,63 +17,47 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Slf4j
-@Validated
 @RestController
-@RequestMapping("/persons")
-//@ControllerAdvice
-public class PersonController {
+@RequestMapping("/persons/{idTelegram}/template/{nameTemplate}/event")
+public class EventController {
 
-    @Autowired // внедрит класс2 в класс1
-    private PersonService personService;
+    @Autowired
+    private EventService eventService;
 
-
-    //get post put delete
-
-    @GetMapping("/getIdTelegram")
-    public ResponseEntity<?> getIdTelegram(@RequestParam Long idTelegram) throws NotifierException{
-        return ResponseEntity.ok(personService.get(idTelegram));
-    }
-
-    @PostMapping("/create") //localhost:8081/persons/create
-    public ResponseEntity<?> create(@RequestBody @Validated(ValidationGroup.class) SavePersonRq request) throws NotifierException {
-        personService.create(request);
+    @PostMapping("/create")
+    public ResponseEntity<?> createEvent(@PathVariable Long idTelegram, @PathVariable String nameTemplate, @RequestBody @Validated(ValidationGroup.class) SaveEventRq request) throws NotifierException {
+        eventService.createEvent(idTelegram, nameTemplate, request);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
+    @DeleteMapping("/delete")
+    public ResponseEntity<String> deleteEvent(@PathVariable Long idTelegram, @PathVariable Long nameTemplate , @RequestParam Long idEvent) throws NotifierException {
+        return ResponseEntity.ok("Event delete: " + eventService.deleteEvent(idTelegram,nameTemplate,idEvent));
+    }
+
     @GetMapping("/all")
-    public ResponseEntity<Set<Person>> all() {
-        return ResponseEntity.ok(personService.all());
+    public ResponseEntity<List<EventResponse>> all(@PathVariable Long idTelegram, @PathVariable String nameTemplate) throws NotifierException {
+        return ResponseEntity.ok(eventService.all(idTelegram, nameTemplate));
     }
 
-
-    @DeleteMapping("/deleteId")
-    public ResponseEntity<?> deleteId( @RequestParam Long Id) throws NotifierException{
-            personService.delete(Id);
-            return ResponseEntity.ok().build();
+    @PutMapping("/{idEvent}/update")
+    public ResponseEntity<Event> updateEvent (@PathVariable Long tId,@PathVariable Long eId, @RequestBody @Validated(ValidationGroup.class) SaveEventRq request) throws NotifierException {
+        return ResponseEntity.ok(eventService.updateEvent(tId, eId, request));
     }
 
-    @PutMapping("/update/{id}")
-    public ResponseEntity<Person> update(@PathVariable Long id, @RequestBody @Validated(ValidationGroup.class) SavePersonRq request) throws NotifierException {
-        return ResponseEntity.ok(personService.update(id ,request));
-    }
-
-    @DeleteMapping("/deleteAll")
-    public ResponseEntity<Void> deleteAll() {
-        personService.delete();
-        return ResponseEntity.ok().build();
-    }
 
     @ExceptionHandler(value = NotifierException.class) // обработка исключения
     public ResponseEntity<ErrorResponse> handle(NotifierException e) {
+
         return ResponseEntity.status(e.getStatus()).body(new ErrorResponse(e.getCode()));
     }
 
     @ExceptionHandler(value = MethodArgumentNotValidException.class) // обработка исключения
     public ResponseEntity<ValidationErrorResponse> handle(MethodArgumentNotValidException e) {
+        log.error("Validation error", e);
         List<ValidationErrorResponse.Error> errors = e.getBindingResult().getFieldErrors().stream()
                 .map(s -> new ValidationErrorResponse.Error(s.getField(), s.getDefaultMessage()))
                 .collect(Collectors.toList());

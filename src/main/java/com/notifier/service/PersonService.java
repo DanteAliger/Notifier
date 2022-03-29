@@ -4,6 +4,7 @@ import com.notifier.exception.NotifierException;
 import com.notifier.model.Person;
 import com.notifier.repository.PersonRepository;
 import com.notifier.web.request.SavePersonRq;
+import com.notifier.web.response.PersonResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -21,13 +22,15 @@ public class PersonService {
     @Autowired
     private PersonRepository personRepository;
 
+
     public Person create(SavePersonRq request) throws NotifierException {
-        if (personRepository.findByName(request.getName()) == null) {
+        if (!personRepository.findByIdTelegram(request.getIdTelegram()).isPresent()) {
             Person person = new Person();
             person.setName(request.getName());
             person.setSurname(request.getSurname());
             person.setPhone(request.getPhone());
             person.setEmail(request.getEmail());
+            person.setIdTelegram(request.getIdTelegram());
             return personRepository.save(person);
         } else {
             throw new NotifierException(USER_EXISTS, HttpStatus.CONFLICT);
@@ -35,8 +38,8 @@ public class PersonService {
     }
 
     public void delete(Long id) throws NotifierException {
-        if (personRepository.findById(id).isPresent()) {
-            personRepository.deleteById(id);
+        if (personRepository.findByIdTelegram(id).isPresent()) {
+            personRepository.deleteByIdTelegram(id);
         } else {
             throw new NotifierException(NOT_FOUND, HttpStatus.NOT_FOUND);
         }
@@ -51,13 +54,9 @@ public class PersonService {
         return personAll;
     }
 
-    public Person get(String name) throws NotifierException {
-        if (personRepository.findByName(name) != null) {
-            return personRepository.findByName(name);
-        } else {
-            throw new NotifierException(NOT_FOUND, HttpStatus.NOT_FOUND);
+    public PersonResponse get(Long id) throws NotifierException {
+            return personRepository.findByIdTelegram(id).map(PersonResponse::getIdTelegramResponse).orElseThrow(() -> new NotifierException(NOT_FOUND, HttpStatus.NOT_FOUND));
         }
-    }
 
     public Person update(Long id,SavePersonRq request) throws NotifierException{
         Person person = personRepository.findById(id)

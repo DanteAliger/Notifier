@@ -11,7 +11,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 
 @Data
-@Accessors(chain = true) // сhain - это цепочка, создает ципочку из setterov and getterov, то есть сделать в одну строку всё
+@Accessors(chain = true) // сhain - это цепочка, создает цепочку из setterov and getterov, то есть сделать в одну строку всё
 @Entity
 //@ManyToOne
 @TypeDef(
@@ -29,7 +29,7 @@ public class Event {
     private Duration duration = Duration.ofDays(7);
 
     @Column(name = "period_time_notification", columnDefinition = "interval")
-    private Duration periodTimeNotification;
+    private Duration periodTimeNotification = Duration.ofDays(7);
     private Boolean repeatable;
     private LocalDateTime nextExecution;
 

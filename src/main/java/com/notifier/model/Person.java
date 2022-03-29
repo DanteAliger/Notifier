@@ -14,6 +14,7 @@ public class Person{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    private Long idTelegram;
     private String name;
     private String surname;
     private String phone;

@@ -4,11 +4,11 @@ import com.notifier.exception.ErrorResponse;
 import com.notifier.exception.NotifierException;
 import com.notifier.exception.ValidationErrorResponse;
 import com.notifier.model.Event;
-import com.notifier.model.Template;
-import com.notifier.service.PersonTemplateService;
+import com.notifier.service.TemplateService;
 import com.notifier.web.request.SaveEventRq;
 import com.notifier.web.request.SaveTemplateRq;
 import com.notifier.web.request.validation.ValidationGroup;
+import com.notifier.web.response.TemplateResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,36 +22,30 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
-@RequestMapping("/templates")
+@RequestMapping("/persons/{idTelegram}/template")
 public class TemplateController {
     @Autowired
-    private PersonTemplateService personTemplateService;
+    private TemplateService templateService;
 
-    @PostMapping("/{id}/create")
-    public ResponseEntity<String> createTemplate(@PathVariable Long id, @RequestBody @Validated(ValidationGroup.class) SaveTemplateRq request) throws NotifierException {
-        Template template = personTemplateService.createTemplate(id, request);
-        return ResponseEntity.ok("Timetable " + template.getName() + " added");
+    @PostMapping("/create")
+    public ResponseEntity<?> createTemplate(@PathVariable Long idTelegram, @RequestBody @Validated(ValidationGroup.class) SaveTemplateRq request) throws NotifierException {
+        templateService.createTemplate(idTelegram, request);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @DeleteMapping("/{tId}/delete")
-    public ResponseEntity<String> deleteTemplate(@PathVariable Long tId ) throws NotifierException {
-        return ResponseEntity.ok("Template delete: " + personTemplateService.deleteTemplate(tId));
+    @DeleteMapping("/delete")
+    public ResponseEntity<?> deleteTemplate(@PathVariable Long idTelegram, @RequestParam String nameT) throws NotifierException {
+        return ResponseEntity.ok(templateService.deleteTemplate(idTelegram, nameT));
     }
 
-    @PostMapping("/{id}/event/create")
-    public ResponseEntity<String> createEvent(@PathVariable Long id, @RequestBody @Validated(ValidationGroup.class) SaveEventRq request) throws NotifierException{
-        Event event = personTemplateService.createEvent(id, request);
-        return ResponseEntity.ok("Event add: " + event.getText());
+    @PostMapping("/select")
+    public ResponseEntity<?> selectTemplate(@PathVariable Long idTelegram, @RequestParam String nameT) throws NotifierException {
+        return ResponseEntity.ok(templateService.selectTemplate(idTelegram, nameT));
     }
 
-    @PutMapping("/{tId}/event/{eId}/update")
-    public ResponseEntity<Event> updateEvent (@PathVariable Long tId,@PathVariable Long eId, @RequestBody @Validated(ValidationGroup.class) SaveEventRq request) throws NotifierException {
-        return ResponseEntity.ok(personTemplateService.updateEvent(tId, eId, request));
-    }
-
-    @DeleteMapping("/{tId}/event/{eId}/delete")
-    public ResponseEntity<String> deleteEvent(@PathVariable Long tId, @PathVariable Long eId ) throws NotifierException {
-        return ResponseEntity.ok("Event delete: " + personTemplateService.deleteEvent(tId,eId));
+    @GetMapping("/all")
+    public ResponseEntity<List<TemplateResponse>> all(@PathVariable Long idTelegram) throws NotifierException {
+        return ResponseEntity.ok(templateService.all(idTelegram));
     }
 
     @ExceptionHandler(value = NotifierException.class) // обработка исключения
