@@ -9,8 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
@@ -35,7 +33,6 @@ public class NotificationScheduler {
     }
 
     private void notify(NotificationDTO event){
-
         if (notifyService.notifyTelegram(new NotifyRq(event.getIdTelegram(), event.getTextEvent())))
         {
         log.info("Notification: " + event.getTextEvent());

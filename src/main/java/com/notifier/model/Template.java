@@ -21,7 +21,7 @@ public class Template{
     @JsonIgnore
     private Person person;
 
-    @OneToMany(cascade = CascadeType.ALL) //каскадные действия
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_template")
     private List<Event> events = new ArrayList<>();
 

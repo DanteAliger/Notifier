@@ -1,6 +1,5 @@
 package com.notifier.web.response;
 
-
 import com.notifier.model.Event;
 import com.notifier.web.utils.Status;
 import lombok.Data;

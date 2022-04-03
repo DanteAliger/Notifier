@@ -2,7 +2,7 @@ package com.notifier.web.request;
 
 import lombok.Data;
 
-@Data // создаёт коструктор() required argument, get set toString equals HashCode
+@Data
 public class SavePersonRq {
 
 //    @NotNull(message = Constants.NOT_NULL , groups = One.class)

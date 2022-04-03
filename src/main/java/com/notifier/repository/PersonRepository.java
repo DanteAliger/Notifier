@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-@Repository // интерфейс реализует спринг Jpa
+@Repository
 public interface PersonRepository extends JpaRepository<Person, Long> {
 
     Optional<Person> findByIdTelegram(Long idTelegram);

@@ -39,16 +39,3 @@ public interface EventRepository extends JpaRepository<Event, Long> {
 
 }
 
-
-//         "WHEN (e.repeatable = TRUE) " +
-//         "THEN SET e.next_execution = e.next_execution + e.duration " +
-//         "ELSE SET e.status ='COMPLETED' WHEN (e.repeatable = FALSE)"
-
-//    @Query(value = "select e.* from event e " +
-//            "join template on e.id_template = template.id " +
-//            "join person on template.id_person = person.id " +
-//            "where person.status='ACTIVE' " +
-//            "and template.status='ACTIVE' " +
-//            "and e.status='ACTIVE' " +
-//            "and e.next_execution < CURRENT_TIMESTAMP " , nativeQuery = true )
-//    List<Event> findNotificationEvents();

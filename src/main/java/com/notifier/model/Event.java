@@ -5,15 +5,13 @@ import com.vladmihalcea.hibernate.type.interval.PostgreSQLIntervalType;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import org.hibernate.annotations.TypeDef;
-
 import javax.persistence.*;
 import java.time.Duration;
 import java.time.LocalDateTime;
 
 @Data
-@Accessors(chain = true) // сhain - это цепочка, создает цепочку из setterov and getterov, то есть сделать в одну строку всё
+@Accessors(chain = true)
 @Entity
-//@ManyToOne
 @TypeDef(
         typeClass = PostgreSQLIntervalType.class,
         defaultForType = Duration.class
@@ -35,8 +33,6 @@ public class Event {
 
     @Enumerated(value = EnumType.STRING)
     private Status status = Status.ACTIVE;
-
-
 
     public LocalDateTime notificationTime(){
         return this.nextExecution.minusMinutes(this.duration.toMinutes());

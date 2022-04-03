@@ -7,14 +7,12 @@ import com.notifier.model.Template;
 import com.notifier.repository.EventRepository;
 import com.notifier.repository.PersonRepository;
 import com.notifier.repository.TemplateRepository;
-import com.notifier.web.request.SaveEventRq;
 import com.notifier.web.request.SaveTemplateRq;
 import com.notifier.web.response.TemplateResponse;
 import com.notifier.web.utils.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -43,22 +41,12 @@ public class TemplateService {
             return new TemplateResponse(template.getId(), template.getName(), template.getStatus());
         } else
             throw new NotifierException(TIMETABLE_EXISTS, HttpStatus.CONFLICT);
-//        if(!CollectionUtils.isEmpty(request.getEvents())){
-//            request.getEvents().forEach((event) -> template.addEvent(event.toEntity()));
-//        }
-        
-//        for (CreateTemplateRq.EventRq event: request.getEvents()) {
-//            template.getEvents().add(event.toEntity());
-//        }
-//        throw new NotifierException(USER_EXISTS, HttpStatus.CONFLICT);
-
     }
 
     public String deleteTemplate(Long idTelegram, String nameT) throws NotifierException {
         Person person = personRepository.findByIdTelegram(idTelegram).orElseThrow(() -> new NotifierException(USER_NOT_FOUND, HttpStatus.NOT_FOUND));
         Template template = person.getTemplates().stream().filter(t-> t.getName().equals(nameT)).findFirst().get();
         template.getEvents().stream().forEach(e-> eventRepository.delete(e));
-//      Template template = templateRepository.findByName(nameT).orElseThrow(() -> new NotifierException(NOT_FOUND, HttpStatus.NOT_FOUND));
         templateRepository.deleteById(template.getId());
         return template.getName();
     }

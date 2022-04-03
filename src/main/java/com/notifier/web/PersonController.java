@@ -23,14 +23,10 @@ import java.util.stream.Collectors;
 @Validated
 @RestController
 @RequestMapping("/persons")
-//@ControllerAdvice
 public class PersonController {
 
-    @Autowired // внедрит класс2 в класс1
+    @Autowired
     private PersonService personService;
-
-
-    //get post put delete
 
     @GetMapping("/getIdTelegram")
     public ResponseEntity<?> getIdTelegram(@RequestParam Long idTelegram) throws NotifierException{

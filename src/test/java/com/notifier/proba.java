@@ -1,5 +1,5 @@
 package com.notifier;
 
-public interface proba {
-
+public interface proba{
+    int len(Class a, String s);
 }

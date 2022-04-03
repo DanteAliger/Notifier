@@ -8,7 +8,7 @@ import java.util.List;
 
 
 @Data
-@Entity // создание сущности
+@Entity
 public class Person{
 
     @Id

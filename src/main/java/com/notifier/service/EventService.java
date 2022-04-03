@@ -14,7 +14,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
@@ -57,7 +56,7 @@ public class EventService {
 
 
     public List<EventResponse> all(Long idTelegram, String nameTemplate) throws NotifierException {
-        log.info("Возвращение списка событий");
+        log.info("Возвращение списка событий, idTelegram = {}", idTelegram );
         Person person = personRepository.findByIdTelegram(idTelegram).orElseThrow(() -> new NotifierException(USER_NOT_FOUND, HttpStatus.NOT_FOUND));
         Template template = person.getTemplates().stream().filter(t -> t.getName().equals(nameTemplate)).findFirst().orElseThrow(() -> new NotifierException(USER_NOT_FOUND, HttpStatus.NOT_FOUND));
         List<EventResponse> eventAll = new ArrayList<>();

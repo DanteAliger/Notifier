@@ -1,8 +1,5 @@
 package com.notifier.web.request.validation;
 
-
-import com.notifier.web.request.validation.DataCheck;
-
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import java.time.LocalDateTime;
